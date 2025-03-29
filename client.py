@@ -21,7 +21,9 @@ try:
         print('Waiting for a response from the server')
         data, server = sock.recvfrom(4096)
         print(f'Received following message:\n{data.decode()}')
-        
+except Exception as e:
+    print(f'An error occurred:/n {e}')
 finally:
     print('Closing socket')
     sock.close()
+    os.unlink(client_address)

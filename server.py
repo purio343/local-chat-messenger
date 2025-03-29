@@ -12,7 +12,7 @@ try:
 except FileNotFoundError:
     pass
 
-print(f'Server starging up on {server_address}')
+print(f'Server starting up on {server_address}')
 sock.bind(server_address)
 fake = Faker('jp-JP')
 
@@ -25,7 +25,15 @@ try:
 
     if data:
        person = Person(fake.name(), fake.address(), fake.job())
-       sent = sock.sendto(person.introduce().encode('utf-8'), address)
+       message = person.introduce()
+       if not message:
+          message = 'No introduction available'
+       sent = sock.sendto(message.encode('utf-8'), address)
        print(f'sent {sent} bytes to {address}')
 finally:
-    os.unlink(server_address)
+    try:
+        os.unlink(server_address)
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        print(f'Error while deleting socket file: /n{e}')
