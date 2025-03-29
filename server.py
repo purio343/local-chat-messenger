@@ -1,17 +1,8 @@
 from faker import Faker
 import socket
 import os
+from person import Person
 
-class Person:
-    def __init__(self, name, address, job):
-       self.name = name
-       self.address = address
-       self.job = job
-
-    def introduce(self):
-       string = f'私の名前は{self.name}です。\n{self.address}に住んでいて、{self.job}として働いています。'
-       return string
-    
 sock = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
 server_address = '/tmp/server_socket_1099'
 
@@ -33,7 +24,6 @@ try:
     print(f'Received data: {data.decode()}')
 
     if data:
-    #    fake = Faker('jp-JP')
        person = Person(fake.name(), fake.address(), fake.job())
        sent = sock.sendto(person.introduce().encode('utf-8'), address)
        print(f'sent {sent} bytes to {address}')
